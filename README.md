@@ -7,6 +7,8 @@ docker-compose up
 ```
 Open http://localhost:3000 to see the demo.
 
+*Note: You need to restart `data-readonly` service on first time startup*
+
 ## Project structure
 
 - app: React webapp demo http://localhost:3000
