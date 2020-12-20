@@ -1,0 +1,60 @@
+{
+  "name": "read-replicas-demo-react",
+  "version": "1.0.0",
+  "description": "Hasura read replica React demo",
+  "main": "index.js",
+  "keywords": [
+    "hasura",
+    "read-replica",
+    "react"
+  ],
+  "author": "Toan Nguyen",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.3.2",
+    "@apollo/react-hooks": "^4.0.0",
+    "@types/hasura": "^0.1.0",
+    "@types/node": "^14.14.14",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "graphql": "^15.4.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^4.0.1",
+    "subscriptions-transport-ws": "^0.9.18",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "create-react-app": "^4.0.1",
+    "typescript": "^4.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

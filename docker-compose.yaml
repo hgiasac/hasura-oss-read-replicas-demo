@@ -1,0 +1,81 @@
+version: '3'
+
+volumes:
+  postgresql_master_data:
+  postgresql_replica_data:
+
+services:
+  app:
+    image: app
+    build: ./client
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      CI: "true"
+
+  postgres-master:
+    image: 'bitnami/postgresql:13'
+    ports:
+      - '5432'
+    volumes:
+      - 'postgresql_master_data:/bitnami/postgresql'
+    environment:
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: custompassword
+      POSTGRESQL_DATABASE: postgres
+      POSTGRESQL_SYNCHRONOUS_COMMIT_MODE: "on"
+      POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS: "1"
+
+  postgres-replica:
+    image: 'bitnami/postgresql:13'
+    ports:
+      - '5432'
+    volumes:
+      - 'postgresql_replica_data:/bitnami/postgresql'
+    depends_on:
+      - postgres-master
+    environment:
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_MASTER_HOST: postgres-master
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: custompassword
+      POSTGRESQL_MASTER_PORT_NUMBER: 5432
+
+  data:
+    image: hasura/graphql-engine:v1.3.2.cli-migrations-v2
+    volumes:
+      - ./data/migrations:/hasura-migrations
+      - ./data/metadata:/hasura-metadata
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+    - postgres-master
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:custompassword@postgres-master:5432/postgres
+      HASURA_GRAPHQL_MIGRATIONS_DIR: "/hasura-migrations"
+      HASURA_GRAPHQL_METADATA_DIR: "/hasura-metadata"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"  
+      HASURA_GRAPHQL_LOG_LEVEL: "debug"
+      HASURA_GRAPHQL_DEV_MODE: "true" 
+
+  data-readonly:
+    image: hasura/graphql-engine:v1.3.2-readonly
+    ports:
+      - "8081:8080"
+    depends_on:
+    - data
+    - postgres-replica
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:custompassword@postgres-replica:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"  
+      HASURA_GRAPHQL_LOG_LEVEL: "debug"
+      HASURA_GRAPHQL_DEV_MODE: "true"   
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: "/srv/console-assets" 
