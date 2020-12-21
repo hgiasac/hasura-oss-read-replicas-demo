@@ -1,19 +1,15 @@
 import * as React from 'react';
-import { useQuery, ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_ALL_USERS } from '../../shared/graphql';
 import { User } from '../../shared/types';
 import UserCreate from './Create';
 import UserTable from './Table';
 import Summary from './Summary';
 
-type Props = {
-  client: ApolloClient<NormalizedCacheObject>;
-}
-const UserSection: React.FC<Props> = ({ client }) => {
+type Props = {}
+const UserSection: React.FC<Props> = () => {
 
-  const { data, error, loading, refetch } = useQuery<{ users: User[] }>(GET_ALL_USERS, {
-    client
-  });
+  const { data, error, loading, refetch } = useQuery<{ users: User[] }>(GET_ALL_USERS);
 
   const handleCreateSuccess = () => {
     refetch();

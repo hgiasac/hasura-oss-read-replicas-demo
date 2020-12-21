@@ -16,7 +16,7 @@ function App() {
     <ApolloProvider client={client}>
       <div className="App">
         <div className="container">
-          <UserScreen client={client} />
+          <UserScreen />
         </div>
       </div>
     </ApolloProvider>
